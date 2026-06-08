@@ -6,7 +6,7 @@ import { CATEGORIES } from '../mock';
 import { useShop } from '../context/ShopContext';
 
 const Home = () => {
-  const { products } = useShop();
+  const { products, getCategoryCount } = useShop();
   const featured = products.filter(p => p.featured);
   const newItems = products.slice(0, 8);
 
@@ -78,7 +78,7 @@ const Home = () => {
           {CATEGORIES.slice(0, 12).map(c => (
             <Link key={c.id} to={`/shop/${c.id}`} className="pixel-panel p-4 text-center hover:border-[#1cc4f0] transition-colors">
               <div className="pixel-font text-xs text-[#1cc4f0] mb-1">{c.name}</div>
-              <div className="minecraft-font text-[#93b0d8] text-base">{c.count} items</div>
+              <div className="minecraft-font text-[#93b0d8] text-base">{getCategoryCount(c.id)} items</div>
             </Link>
           ))}
         </div>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Shield, Package, Users, DollarSign, ChevronDown, Edit3, Save, X, Plus, Trash2, RotateCcw, TicketPercent, Filter } from 'lucide-react';
+import { Shield, Package, Users, DollarSign, ChevronDown, Edit3, Save, X, Plus, Trash2, RotateCcw, TicketPercent, Filter, Upload, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useShop } from '../context/ShopContext';
@@ -346,8 +346,61 @@ const Admin = () => {
                     <input type="number" className="pixel-input" value={productForm.stock} onChange={e => setProductForm({ ...productForm, stock: e.target.value })} />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="pixel-font text-[9px] text-[#93b0d8] block mb-1">IMAGE URL</label>
-                    <input className="pixel-input" placeholder="https://..." value={productForm.image} onChange={e => setProductForm({ ...productForm, image: e.target.value })} />
+                    <label className="pixel-font text-[9px] text-[#93b0d8] block mb-1">PRODUCT IMAGE</label>
+                    <div className="grid md:grid-cols-[120px,1fr] gap-3 items-start">
+                      <div className="w-full aspect-square bg-[#0a0e1a] border-2 border-[#25304a] flex items-center justify-center">
+                        {productForm.image ? (
+                          <img
+                            src={productForm.image}
+                            alt="preview"
+                            className="w-20 h-20"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <ImageIcon className="w-8 h-8 text-[#6f88ad]" />
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label className="btn-cyan inline-flex items-center gap-2 cursor-pointer">
+                          <Upload className="w-3 h-3" /> Upload Image
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              if (file.size > 500 * 1024) {
+                                toast({ title: 'File too big', description: 'Max 500 KB. Use a smaller image.' });
+                                return;
+                              }
+                              const reader = new FileReader();
+                              reader.onload = (ev) => setProductForm({ ...productForm, image: ev.target.result });
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                        </label>
+                        <div className="minecraft-font text-[#6f88ad] text-sm">or paste URL:</div>
+                        <input
+                          className="pixel-input"
+                          placeholder="https://..."
+                          value={productForm.image?.startsWith('data:') ? '' : (productForm.image || '')}
+                          onChange={e => setProductForm({ ...productForm, image: e.target.value })}
+                        />
+                        {productForm.image && (
+                          <button
+                            type="button"
+                            onClick={() => setProductForm({ ...productForm, image: '' })}
+                            className="btn-ghost inline-flex items-center gap-1"
+                            style={{ padding: '6px 10px' }}
+                          >
+                            <X className="w-3 h-3" /> Clear
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="minecraft-font text-[#6f88ad] text-sm mt-2">Recommended: square PNG, max 500 KB (will be stored in browser).</div>
                   </div>
                   <div className="md:col-span-2">
                     <label className="pixel-font text-[9px] text-[#93b0d8] block mb-1">DESCRIPTION</label>

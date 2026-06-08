@@ -41,9 +41,10 @@ export const ShopProvider = ({ children }) => {
   };
 
   const getProduct = (id) => products.find(p => p.id === id);
+  const getCategoryCount = (categoryId) => products.filter(p => p.category === categoryId).length;
 
   return (
-    <ShopContext.Provider value={{ products, addProduct, updateProduct, deleteProduct, resetProducts, getProduct }}>
+    <ShopContext.Provider value={{ products, addProduct, updateProduct, deleteProduct, resetProducts, getProduct, getCategoryCount }}>
       {children}
     </ShopContext.Provider>
   );
