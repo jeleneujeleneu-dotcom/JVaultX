@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Minus, Plus, ShoppingCart, Check } from 'lucide-react';
-import { PRODUCTS, CATEGORIES } from '../mock';
+import { CATEGORIES } from '../mock';
+import { useShop } from '../context/ShopContext';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../hooks/use-toast';
@@ -9,7 +10,8 @@ import { useToast } from '../hooks/use-toast';
 const ProductDetail = () => {
   const { id } = useParams();
   const nav = useNavigate();
-  const product = PRODUCTS.find(p => p.id === id);
+  const { products, getProduct } = useShop();
+  const product = getProduct(id);
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
   const { toast } = useToast();
@@ -24,7 +26,7 @@ const ProductDetail = () => {
   }
 
   const cat = CATEGORIES.find(c => c.id === product.category);
-  const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   const handleAdd = () => {
     addToCart(product, qty);

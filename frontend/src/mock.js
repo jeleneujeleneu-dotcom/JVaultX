@@ -101,12 +101,19 @@ export const PRODUCTS = [
 ];
 
 export const MOCK_ORDERS = [
-  { id: '1489', userId: 'demo', items: [{ name: 'PVP Kit', qty: 1 }, { name: 'Golden Apples', qty: 3 }, { name: 'Experience Bottles', qty: 5 }, { name: 'Elytra', qty: 1 }], total: 22.45, status: 'delivered', date: '2026-06-05', coords: { x: 25861, y: 33, z: -10788 } },
-  { id: '1488', userId: 'demo', items: [{ name: 'Diamond Sword', qty: 1 }, { name: 'Diamond Pickaxe', qty: 1 }], total: 14.98, status: 'delivered', date: '2026-06-03', coords: { x: 12300, y: 64, z: 8200 } },
-  { id: '1477', userId: 'demo', items: [{ name: 'Beacon', qty: 1 }], total: 4.99, status: 'pending', date: '2026-06-01', coords: { x: 0, y: 70, z: 0 } },
+  { id: '1489', userId: 'admin', mcName: 'AdminPlayer', items: [{ name: 'PVP Kit', qty: 1 }, { name: 'Golden Apples', qty: 3 }, { name: 'Experience Bottles', qty: 5 }, { name: 'Elytra', qty: 1 }], total: 22.45, status: 'delivered', date: '2026-06-05', coords: { x: 25861, y: 33, z: -10788 }, notes: 'Delivered at end portal base.' },
+  { id: '1488', userId: 'admin', mcName: 'AdminPlayer', items: [{ name: 'Diamond Sword', qty: 1 }, { name: 'Diamond Pickaxe', qty: 1 }], total: 14.98, status: 'delivered', date: '2026-06-03', coords: { x: 12300, y: 64, z: 8200 }, notes: '' },
+  { id: '1477', userId: 'admin', mcName: 'AdminPlayer', items: [{ name: 'Beacon', qty: 1 }], total: 4.99, status: 'pending', date: '2026-06-01', coords: { x: 0, y: 70, z: 0 }, notes: 'Awaiting payment confirmation.' },
 ];
 
 export const MOCK_USERS = [
   { username: 'admin', password: 'admin123', role: 'admin', mcName: 'AdminPlayer', email: 'admin@jvaultx.com' },
-  { username: 'demo', password: 'demo123', role: 'user', mcName: 'DemoCrafter', email: 'demo@jvaultx.com' },
 ];
+
+// Sell.app integration config
+export const SELL_APP = {
+  storeSlug: 'jvaultx', // change to your real sell.app slug
+  baseUrl: 'https://jvaultx.sell.app',
+};
+
+export const MIN_ORDER_USD = 5;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { MIN_ORDER_USD } from '../mock';
 
 const Cart = () => {
   const { items, total, updateQty, removeFromCart, clearCart } = useCart();
@@ -79,8 +80,16 @@ const Cart = () => {
             <span className="pixel-font text-xs text-[#cfe6ff]">TOTAL</span>
             <span className="pixel-font text-xl text-[#1cc4f0]">${total.toFixed(2)}</span>
           </div>
-          <button onClick={() => nav('/checkout')} className="btn-cyan w-full">Checkout</button>
-          <p className="minecraft-font text-[#6f88ad] text-base text-center mt-3">Secure payment • Instant delivery</p>
+          {total < MIN_ORDER_USD && (
+            <div className="pixel-panel-inner p-3 mb-4 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-[#e0a522] flex-shrink-0 mt-0.5" />
+              <div className="minecraft-font text-[#e0a522] text-base leading-tight">
+                Minimum order is ${MIN_ORDER_USD.toFixed(2)}. Add ${(MIN_ORDER_USD - total).toFixed(2)} more to checkout.
+              </div>
+            </div>
+          )}
+          <button onClick={() => nav('/checkout')} disabled={total < MIN_ORDER_USD} className="btn-cyan w-full">Checkout</button>
+          <p className="minecraft-font text-[#6f88ad] text-base text-center mt-3">Secure payment via sell.app</p>
         </div>
       </div>
     </div>

@@ -4,20 +4,33 @@ import { MOCK_USERS } from '../mock';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [users, setUsers] = useState(MOCK_USERS);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('jvaultx_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  });
+  const [users, setUsers] = useState(() => {
+    try {
+      const saved = localStorage.getItem('jvaultx_users');
+      return saved ? JSON.parse(saved) : MOCK_USERS;
+    } catch { return MOCK_USERS; }
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem('jvaultx_user');
-    if (saved) setUser(JSON.parse(saved));
     const savedUsers = localStorage.getItem('jvaultx_users');
-    if (savedUsers) setUsers(JSON.parse(savedUsers));
-    else localStorage.setItem('jvaultx_users', JSON.stringify(MOCK_USERS));
+    if (!savedUsers) localStorage.setItem('jvaultx_users', JSON.stringify(MOCK_USERS));
   }, []);
 
+  const getAllUsers = () => JSON.parse(localStorage.getItem('jvaultx_users') || '[]');
+  const persistUsers = (list) => {
+    setUsers(list);
+    localStorage.setItem('jvaultx_users', JSON.stringify(list));
+  };
+
   const login = (username, password) => {
-    const allUsers = JSON.parse(localStorage.getItem('jvaultx_users') || '[]');
-    const found = allUsers.find(u => u.username === username && u.password === password);
+    const all = getAllUsers();
+    const found = all.find(u => u.username === username && u.password === password);
     if (found) {
       const safeUser = { username: found.username, role: found.role, mcName: found.mcName, email: found.email };
       setUser(safeUser);
@@ -28,14 +41,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = (username, password, mcName, email) => {
-    const allUsers = JSON.parse(localStorage.getItem('jvaultx_users') || '[]');
-    if (allUsers.find(u => u.username === username)) {
+    const all = getAllUsers();
+    if (all.find(u => u.username === username)) {
       return { success: false, error: 'Username already exists' };
     }
     const newUser = { username, password, mcName, email, role: 'user' };
-    const updated = [...allUsers, newUser];
-    setUsers(updated);
-    localStorage.setItem('jvaultx_users', JSON.stringify(updated));
+    persistUsers([...all, newUser]);
     const safeUser = { username, role: 'user', mcName, email };
     setUser(safeUser);
     localStorage.setItem('jvaultx_user', JSON.stringify(safeUser));
@@ -47,8 +58,42 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('jvaultx_user');
   };
 
+  const changePassword = (currentPwd, newPwd) => {
+    if (!user) return { success: false, error: 'Not logged in' };
+    const all = getAllUsers();
+    const idx = all.findIndex(u => u.username === user.username);
+    if (idx === -1) return { success: false, error: 'User not found' };
+    if (all[idx].password !== currentPwd) return { success: false, error: 'Current password is wrong' };
+    if (newPwd.length < 4) return { success: false, error: 'New password too short (min 4)' };
+    all[idx].password = newPwd;
+    persistUsers(all);
+    return { success: true };
+  };
+
+  const updateUserRole = (username, role) => {
+    const all = getAllUsers();
+    const updated = all.map(u => u.username === username ? { ...u, role } : u);
+    persistUsers(updated);
+    if (user && user.username === username) {
+      const newUser = { ...user, role };
+      setUser(newUser);
+      localStorage.setItem('jvaultx_user', JSON.stringify(newUser));
+    }
+    return { success: true };
+  };
+
+  const updateUserProfile = (patch) => {
+    if (!user) return;
+    const all = getAllUsers();
+    const updated = all.map(u => u.username === user.username ? { ...u, ...patch } : u);
+    persistUsers(updated);
+    const newUser = { ...user, ...patch };
+    setUser(newUser);
+    localStorage.setItem('jvaultx_user', JSON.stringify(newUser));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, users, login, register, logout }}>
+    <AuthContext.Provider value={{ user, users, login, register, logout, changePassword, updateUserRole, updateUserProfile, getAllUsers }}>
       {children}
     </AuthContext.Provider>
   );

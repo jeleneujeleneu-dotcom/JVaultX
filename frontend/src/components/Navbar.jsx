@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Shield, Vault } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Shield, Vault, Truck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
@@ -52,6 +52,11 @@ const Navbar = () => {
               {user.role === 'admin' && (
                 <Link to="/admin" className="nav-link flex items-center gap-1">
                   <Shield className="w-4 h-4" /> Admin
+                </Link>
+              )}
+              {user.role === 'delivery' && (
+                <Link to="/admin" className="nav-link flex items-center gap-1">
+                  <Truck className="w-4 h-4" /> Delivery
                 </Link>
               )}
               <Link to="/account" className="nav-link flex items-center gap-1">

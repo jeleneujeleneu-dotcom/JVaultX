@@ -3,21 +3,23 @@ import { useParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import CategorySidebar from '../components/CategorySidebar';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS, CATEGORIES } from '../mock';
+import { CATEGORIES } from '../mock';
+import { useShop } from '../context/ShopContext';
 
 const Shop = () => {
   const { categoryId } = useParams();
+  const { products } = useShop();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('default');
 
   const filtered = useMemo(() => {
-    let list = categoryId ? PRODUCTS.filter(p => p.category === categoryId) : PRODUCTS;
+    let list = categoryId ? products.filter(p => p.category === categoryId) : products;
     if (search) list = list.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
     if (sort === 'low') list = [...list].sort((a,b) => a.price - b.price);
     if (sort === 'high') list = [...list].sort((a,b) => b.price - a.price);
     if (sort === 'name') list = [...list].sort((a,b) => a.name.localeCompare(b.name));
     return list;
-  }, [categoryId, search, sort]);
+  }, [categoryId, search, sort, products]);
 
   const currentCat = CATEGORIES.find(c => c.id === categoryId);
 

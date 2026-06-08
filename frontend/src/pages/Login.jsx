@@ -55,12 +55,6 @@ const Login = () => {
             No account? <Link to="/register" className="text-[#1cc4f0] hover:underline">Register</Link>
           </p>
         </div>
-
-        <div className="mt-4 pixel-panel-inner p-3">
-          <div className="pixel-font text-[9px] text-[#6f88ad] mb-1">DEMO ACCOUNTS</div>
-          <div className="minecraft-font text-[#cfe6ff] text-base">admin / admin123</div>
-          <div className="minecraft-font text-[#cfe6ff] text-base">demo / demo123</div>
-        </div>
       </div>
     </div>
   );

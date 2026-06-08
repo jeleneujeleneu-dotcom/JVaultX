@@ -2,11 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Zap, Package, Shield, Sparkles } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { PRODUCTS, CATEGORIES } from '../mock';
+import { CATEGORIES } from '../mock';
+import { useShop } from '../context/ShopContext';
 
 const Home = () => {
-  const featured = PRODUCTS.filter(p => p.featured);
-  const newItems = PRODUCTS.slice(0, 8);
+  const { products } = useShop();
+  const featured = products.filter(p => p.featured);
+  const newItems = products.slice(0, 8);
 
   return (
     <div className="relative z-10">
