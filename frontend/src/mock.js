@@ -117,3 +117,21 @@ export const SELL_APP = {
 };
 
 export const MIN_ORDER_USD = 5;
+
+export const DELIVERY_OPTIONS = [
+  { id: 'random', label: 'Random Location', desc: 'We pick a safe spot near spawn', fee: 0 },
+  { id: 'specified', label: 'Specified Coordinates', desc: 'You provide X, Y, Z', fee: 1 },
+  { id: 'meetup', label: 'Meetup', desc: 'Personal meetup in-game', fee: 4 },
+];
+
+export const PRIORITIES = [
+  { id: 'low', label: 'Low', desc: 'Delivered within 24h', fee: 0, color: '#93b0d8' },
+  { id: 'medium', label: 'Medium', desc: 'Delivered within 6h', fee: 2, color: '#1cc4f0' },
+  { id: 'high', label: 'High', desc: 'Delivered within 1h', fee: 5, color: '#e0a522' },
+];
+
+// Default discount codes
+export const DEFAULT_DISCOUNTS = [
+  { code: 'WELCOME10', type: 'percent', value: 10, expiresAt: '2027-12-31', maxUses: 0, uses: 0 },
+  { code: 'SAVE5', type: 'usd', value: 5, expiresAt: '2027-12-31', maxUses: 100, uses: 0 },
+];
