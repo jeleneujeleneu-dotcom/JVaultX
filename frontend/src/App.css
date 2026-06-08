@@ -1,0 +1,291 @@
+/* JVaultX shop styles */
+.App {
+  min-height: 100vh;
+  background: #07080d;
+  color: #e6f1ff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.pixel-font {
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 0.02em;
+}
+
+.minecraft-font {
+  font-family: 'VT323', 'Press Start 2P', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Star/rain background */
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at top, #0b1124 0%, #07080d 60%, #04050a 100%);
+}
+.starfield::before, .starfield::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(100,200,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 50% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 85% 20%, rgba(180,220,255,0.6), transparent),
+    radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.5), transparent);
+  background-size: 100% 100%;
+  animation: twinkle 6s linear infinite;
+}
+.starfield::after {
+  background-image:
+    radial-gradient(1px 1px at 40% 10%, rgba(120,160,255,0.5), transparent),
+    radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 25% 55%, rgba(150,200,255,0.5), transparent);
+  animation-delay: -3s;
+  animation-duration: 9s;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Rain lines (subtle slashes in bg) */
+.rain-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(115deg, transparent 49%, rgba(120, 200, 255, 0.04) 50%, transparent 51%);
+  background-size: 24px 24px;
+}
+
+/* Pixel panel - the bordered box look */
+.pixel-panel {
+  background: rgba(18, 22, 35, 0.85);
+  border: 2px solid #2a3550;
+  box-shadow: 0 0 0 2px #07080d inset, 0 6px 0 rgba(0,0,0,0.4);
+  position: relative;
+}
+.pixel-panel-inner {
+  background: rgba(12, 16, 28, 0.85);
+  border: 1px solid #25304a;
+}
+
+/* Cyan accent button */
+.btn-cyan {
+  background: #1cc4f0;
+  color: #052235;
+  border: 2px solid #08a0c8;
+  box-shadow: 0 4px 0 #066d8a, 0 0 18px rgba(28,196,240,0.35);
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 12px 18px;
+  letter-spacing: 0.05em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  cursor: pointer;
+}
+.btn-cyan:hover {
+  background: #36d4ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #066d8a, 0 0 24px rgba(28,196,240,0.55);
+}
+.btn-cyan:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #066d8a, 0 0 12px rgba(28,196,240,0.35);
+}
+.btn-cyan:disabled {
+  background: #4a6070;
+  color: #1a2230;
+  box-shadow: 0 4px 0 #2a3540;
+  cursor: not-allowed;
+}
+
+.btn-green {
+  background: #1fae51;
+  color: #04150a;
+  border: 2px solid #15813a;
+  box-shadow: 0 4px 0 #0c5b27;
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-green:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #0c5b27; }
+.btn-green:active { transform: translateY(2px); box-shadow: 0 2px 0 #0c5b27; }
+
+.btn-red {
+  background: #d83b3b;
+  color: #1a0202;
+  border: 2px solid #9a2424;
+  box-shadow: 0 4px 0 #5a1010;
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.btn-red:hover { transform: translateY(-2px); }
+
+.btn-ghost {
+  background: transparent;
+  color: #6fb7ff;
+  border: 2px solid #2a3550;
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover { border-color: #1cc4f0; color: #1cc4f0; }
+
+/* Pixel input */
+.pixel-input {
+  background: #0a0e1a;
+  border: 2px solid #25304a;
+  color: #cfe6ff;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+}
+.pixel-input:focus {
+  border-color: #1cc4f0;
+  box-shadow: 0 0 0 2px rgba(28,196,240,0.2);
+}
+
+/* Product card */
+.product-card {
+  background: rgba(15, 20, 34, 0.9);
+  border: 2px solid #25304a;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  position: relative;
+  overflow: hidden;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: #1cc4f0;
+  box-shadow: 0 8px 24px rgba(28,196,240,0.18);
+}
+.product-img-box {
+  background: linear-gradient(180deg, #1a2238 0%, #0d1322 100%);
+  border-bottom: 2px solid #25304a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 140px;
+  position: relative;
+}
+.product-img-box img {
+  width: 80px;
+  height: 80px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+.discount-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #d83b3b;
+  color: #fff;
+  padding: 4px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  border: 2px solid #fff;
+}
+
+/* Pixel scrollbar */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: #0a0e1a; }
+*::-webkit-scrollbar-thumb { background: #2a3550; border: 2px solid #0a0e1a; }
+*::-webkit-scrollbar-thumb:hover { background: #1cc4f0; }
+
+/* Category tab */
+.cat-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  color: #93b0d8;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cat-link:hover { background: rgba(28,196,240,0.08); color: #e6f1ff; border-color: #25304a; }
+.cat-link.active { background: rgba(28,196,240,0.15); color: #1cc4f0; border-color: #1cc4f0; }
+
+/* Header link */
+.nav-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #93b0d8;
+  padding: 8px 12px;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+.nav-link:hover { color: #1cc4f0; }
+.nav-link.active { color: #1cc4f0; }
+
+/* Hero glow */
+.hero-glow {
+  position: absolute;
+  inset: -50% -10% auto -10%;
+  height: 600px;
+  background: radial-gradient(circle at 50% 50%, rgba(28,196,240,0.18), transparent 60%);
+  pointer-events: none;
+}
+
+/* Status pill */
+.status-pill {
+  padding: 6px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  border: 2px solid;
+  display: inline-block;
+  text-transform: uppercase;
+}
+.status-delivered { background: #1fae51; border-color: #15813a; color: #04150a; }
+.status-pending { background: #e0a522; border-color: #9c7110; color: #1a0f00; }
+.status-cancelled { background: #d83b3b; border-color: #9a2424; color: #1a0202; }
+.status-processing { background: #1cc4f0; border-color: #08a0c8; color: #052235; }
+
+/* Table */
+.pixel-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.pixel-table th, .pixel-table td {
+  border: 1px solid #25304a;
+  padding: 12px;
+  text-align: left;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: #cfe6ff;
+}
+.pixel-table th {
+  background: #0e1426;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #1cc4f0;
+  text-transform: uppercase;
+}
+
+/* Floating panel border corners */
+.tab-active {
+  background: #0e1426;
+  color: #1cc4f0;
+  border-bottom-color: transparent;
+}
+.tab-inactive {
+  color: #6f88ad;
+}
