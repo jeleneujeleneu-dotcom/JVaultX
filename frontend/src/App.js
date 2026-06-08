@@ -18,6 +18,7 @@ import Account from './pages/Account';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
+import InfoPage from './pages/InfoPage';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/info/:slug" element={<InfoPage />} />
                   </Routes>
                 </main>
                 <Footer />

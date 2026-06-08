@@ -92,8 +92,14 @@ export const CartProvider = ({ children }) => {
   // Save pending checkout (NOT an order yet)
   const savePendingCheckout = (user, info) => {
     const totals = calcTotals(info);
+    // Sequential order ID starting from highest existing + 1
+    const highestId = orders.reduce((max, o) => {
+      const n = parseInt(o.id, 10);
+      return Number.isFinite(n) && n > max ? n : max;
+    }, 0);
+    const nextId = String(highestId + 1);
     const pending = {
-      id: String(Math.floor(1000 + Math.random() * 9000)),
+      id: nextId,
       userId: user?.username || 'guest',
       mcName: info.mcName,
       email: info.email,

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, Shield, Vault, Truck } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Shield, Vault, Truck, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { DISCORD_URL } from '../mock';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -14,7 +15,6 @@ const Navbar = () => {
   const links = [
     { to: '/', label: 'Home' },
     { to: '/shop', label: 'Shop' },
-    { to: '/shop/offers', label: 'Offers' },
   ];
 
   return (
@@ -26,7 +26,7 @@ const Navbar = () => {
           </div>
           <div>
             <div className="pixel-font text-[#1cc4f0] text-lg leading-none">JVaultX</div>
-            <div className="minecraft-font text-[#6f88ad] text-sm">premium minecraft shop</div>
+            <div className="minecraft-font text-[#6f88ad] text-sm">instant delivery</div>
           </div>
         </Link>
 
@@ -36,6 +36,9 @@ const Navbar = () => {
               {l.label}
             </Link>
           ))}
+          <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer" className="nav-link inline-flex items-center gap-1">
+            <MessageCircle className="w-4 h-4" /> Discord
+          </a>
         </nav>
 
         <div className="flex items-center gap-3">
