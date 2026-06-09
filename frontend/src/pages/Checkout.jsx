@@ -14,7 +14,6 @@ const PAYMENT_METHODS = [
   { id: 'btc', label: 'Bitcoin', sub: 'BTC', Icon: Bitcoin, color: '#f7931a' },
   { id: 'ltc', label: 'Litecoin', sub: 'LTC', Icon: Bitcoin, color: '#a6a9aa' },
   { id: 'eth', label: 'Ethereum', sub: 'ETH', Icon: Bitcoin, color: '#627eea' },
-  { id: 'usdt', label: 'Tether', sub: 'USDT (ERC20 / TRC20)', Icon: Bitcoin, color: '#26a17b' },
 ];
 
 const Checkout = () => {
