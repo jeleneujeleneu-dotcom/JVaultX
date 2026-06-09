@@ -1,12 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, ShieldCheck, AlertCircle, MapPin, Dice5, Users as UsersIcon, Zap, TicketPercent, Check, X } from 'lucide-react';
+import { ExternalLink, AlertCircle, MapPin, Dice5, Users as UsersIcon, Zap, TicketPercent, Check, X, CreditCard, Wallet, Bitcoin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../hooks/use-toast';
 import { SELL_APP, MIN_ORDER_USD, DELIVERY_OPTIONS, PRIORITIES } from '../mock';
 
 const DELIVERY_ICONS = { random: Dice5, specified: MapPin, meetup: UsersIcon };
+
+const PAYMENT_METHODS = [
+  { id: 'card', label: 'Credit / Debit Card', sub: 'Visa, Mastercard, Amex', Icon: CreditCard, color: '#1cc4f0' },
+  { id: 'paypal', label: 'PayPal', sub: 'Pay with your account', Icon: Wallet, color: '#00457c' },
+  { id: 'btc', label: 'Bitcoin', sub: 'BTC', Icon: Bitcoin, color: '#f7931a' },
+  { id: 'ltc', label: 'Litecoin', sub: 'LTC', Icon: Bitcoin, color: '#a6a9aa' },
+  { id: 'eth', label: 'Ethereum', sub: 'ETH', Icon: Bitcoin, color: '#627eea' },
+  { id: 'usdt', label: 'Tether', sub: 'USDT (ERC20 / TRC20)', Icon: Bitcoin, color: '#26a17b' },
+];
 
 const Checkout = () => {
   const { items, subtotal, savePendingCheckout, calcTotals, validateDiscount } = useCart();
@@ -23,6 +32,7 @@ const Checkout = () => {
   const [discountInput, setDiscountInput] = useState('');
   const [appliedCode, setAppliedCode] = useState('');
   const [discountErr, setDiscountErr] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const [redirecting, setRedirecting] = useState(false);
 
   const totals = useMemo(
@@ -100,9 +110,10 @@ const Checkout = () => {
 
     const returnUrl = `${window.location.origin}/payment-success?status=success&order=${pending.id}`;
     const itemsParam = encodeURIComponent(pending.items.map(i => `${i.qty}x ${i.name}`).join(', '));
-    const url = `${SELL_APP.baseUrl}/?ref=jvaultx&pending=${pending.id}&player=${encodeURIComponent(mcName)}&email=${encodeURIComponent(email)}&total=${pending.total.toFixed(2)}&items=${itemsParam}&return_url=${encodeURIComponent(returnUrl)}`;
+    const url = `${SELL_APP.baseUrl}/?ref=jvaultx&pending=${pending.id}&player=${encodeURIComponent(mcName)}&email=${encodeURIComponent(email)}&total=${pending.total.toFixed(2)}&items=${itemsParam}&payment=${paymentMethod}&return_url=${encodeURIComponent(returnUrl)}`;
 
-    toast({ title: 'Redirecting...', description: 'Opening sell.app checkout' });
+    const methodLabel = PAYMENT_METHODS.find(p => p.id === paymentMethod)?.label || paymentMethod;
+    toast({ title: 'Redirecting...', description: `Opening ${methodLabel} checkout` });
     setTimeout(() => { window.location.href = url; }, 600);
   };
 
@@ -232,23 +243,35 @@ const Checkout = () => {
             )}
           </div>
 
-          {/* 5. PAYMENT */}
+          {/* 5. PAYMENT METHOD */}
           <div className="pixel-panel p-6">
-            <div className="pixel-font text-[#1cc4f0] text-sm mb-4 pb-3 border-b-2 border-[#25304a]">5. PAYMENT</div>
-            <div className="pixel-panel-inner p-5 flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#1cc4f0] border-2 border-[#08a0c8] flex items-center justify-center flex-shrink-0" style={{ boxShadow: '0 4px 0 #066d8a' }}>
-                <ShieldCheck className="w-6 h-6 text-[#052235]" />
-              </div>
-              <div>
-                <div className="pixel-font text-[#1cc4f0] text-sm mb-2">PAY WITH SELL.APP</div>
-                <p className="minecraft-font text-[#cfe6ff] text-lg leading-relaxed">
-                  You'll be redirected to <span className="text-[#1cc4f0]">sell.app</span> to complete payment securely. Cards, PayPal, crypto and more.
-                </p>
-                <p className="minecraft-font text-[#6f88ad] text-base mt-2">
-                  Order is created <strong className="text-[#1fae51]">only after</strong> payment is confirmed.
-                </p>
-              </div>
+            <div className="pixel-font text-[#1cc4f0] text-sm mb-4 pb-3 border-b-2 border-[#25304a]">5. PAYMENT METHOD</div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {PAYMENT_METHODS.map(p => {
+                const I = p.Icon;
+                const active = paymentMethod === p.id;
+                return (
+                  <button
+                    type="button"
+                    key={p.id}
+                    onClick={() => setPaymentMethod(p.id)}
+                    className={`p-4 border-2 transition-all text-left ${active ? 'border-[#1cc4f0] bg-[#1cc4f0]/10' : 'border-[#25304a] bg-[#0a0e1a] hover:border-[#3a4a70]'}`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 border-2 flex items-center justify-center" style={{ borderColor: active ? '#1cc4f0' : '#25304a', background: active ? '#0e1426' : 'transparent' }}>
+                        <I className="w-4 h-4" style={{ color: p.color }} />
+                      </div>
+                      {active && <Check className="w-4 h-4 text-[#1cc4f0] ml-auto" />}
+                    </div>
+                    <div className={`pixel-font text-[10px] leading-tight mb-1 ${active ? 'text-[#1cc4f0]' : 'text-[#cfe6ff]'}`}>{p.label}</div>
+                    <div className="minecraft-font text-[#93b0d8] text-sm">{p.sub}</div>
+                  </button>
+                );
+              })}
             </div>
+            <p className="minecraft-font text-[#6f88ad] text-base mt-3">
+              Order is created <strong className="text-[#1fae51]">only after</strong> payment is confirmed. Secure checkout handled by our payment processor.
+            </p>
           </div>
         </div>
 
@@ -276,9 +299,9 @@ const Checkout = () => {
             <span className="pixel-font text-xl text-[#1cc4f0]">${totals.total.toFixed(2)}</span>
           </div>
           <button type="submit" disabled={redirecting} className="btn-cyan w-full inline-flex items-center justify-center gap-2 mt-4">
-            <ExternalLink className="w-3 h-3" /> {redirecting ? 'Opening sell.app...' : `Pay $${totals.total.toFixed(2)}`}
+            <ExternalLink className="w-3 h-3" /> {redirecting ? 'Processing...' : `Pay $${totals.total.toFixed(2)}`}
           </button>
-          <p className="minecraft-font text-[#6f88ad] text-sm text-center mt-3">Secure checkout • sell.app handles payments</p>
+          <p className="minecraft-font text-[#6f88ad] text-sm text-center mt-3">Secure 256-bit SSL checkout</p>
         </div>
       </form>
     </div>
